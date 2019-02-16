@@ -8,7 +8,7 @@
 .param P_STRONG_RATIO=44  * exact=44.25
 .param N_STRONG_RATIO=4.1 * exact=4.126
 .param BALANCED_RATIO=2.2 * exact=2.248
-.param MIN_CHANNEL_WIDTH=2.7u * dont change this
+.param MIN_CHANNEL_WIDTH=3u * dont change this, corresponds to 10-lambda per MOSIS design rule suggestions
 
 .INCLUDE "INV.sp"
 .INCLUDE "INV_N_STRONG.sp"
@@ -77,12 +77,17 @@ Crx1load RX1 0 20p
 Crx2load RX2 0 20p
 
 * Input waveforms as stimulus
-Vtx1 TX1 0 PULSE(0 5 0 1n 1n 1000n 4000n)
-Vtx2 TX2 0 PULSE(0 5 0 1n 1n 30n 100n)
+Vtx1 TX1 0 PULSE(0 5 0 0n 0n 100n 400n)
+Vtx2 TX2 0 PULSE(0 5 0 0n 0n 30n 100n)
 
 * Noise model coupled onto the channel
 * V4 	NOISE 0 SINE(2.5 2 60MEG 0 0 0 0)
 * R3 	NOISE channel 100
+
+.measure tran T_rx_plh trig V(TX1) val={{2.5}} rise=2 targ V(RX2) val={{2.5}} rise=2
+.measure tran T_rx_phl trig V(TX1) val={{2.5}} fall=2 targ V(RX2) val={{2.5}} fall=2
+.measure tran T_rx_rise trig V(RX2) val={{.5}} td=0.2u rise=1 targ V(RX2) val={{4.5}} td=0.2u rise=1
+.measure tran T_rx_fall trig V(RX2) val={{4.5}} td=0.2u fall=1 targ V(RX2) val={{.5}} td=0.2u fall=1
 
 .plot TX1 RX2
 .plot TX2 RX1
@@ -98,12 +103,12 @@ Xtrans4 TX4 TX4CHANNEL RX4 channel2 VDD 0 TRANSCEIVER_NOISE_CANCEL
 Rtx3 channel2 TX3CHANNEL 100
 Rtx4 channel2 TX4CHANNEL 100
 
-Crx3load RX3 0 1p
-Crx4load RX4 0 1p
+Crx3load RX3 0 20p
+Crx4load RX4 0 20p
 
 * Input waveforms as stimulus
-Vtx3 TX3 0 PULSE(0 5 0 1n 1n 1000n 4000n)
-Vtx4 TX4 0 PULSE(0 5 0 1n 1n 30n 100n)
+Vtx3 TX3 0 PULSE(0 5 0 0n 0n 100n 400n)
+Vtx4 TX4 0 PULSE(0 5 0 0n 0n 30n 100n)
 
 .plot TX3 RX4
 .plot TX4 RX3
@@ -111,6 +116,6 @@ Vtx4 TX4 0 PULSE(0 5 0 1n 1n 30n 100n)
 
 .power VDD
 
-.tran 100ps 10u
+.tran 10ps 2u
 
 .end
