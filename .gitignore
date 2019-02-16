@@ -1,5 +1,8 @@
+# T-Spice
 *.log
 *.tsim
+1Wire/
+Project\ 1-wire\ Noise\ Cancelling/
 
 # latex compilation artifacts
 report/*
