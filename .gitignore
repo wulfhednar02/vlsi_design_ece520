@@ -1,2 +1,6 @@
 *.log
 *.tsim
+
+# latex compilation artifacts
+report/*
+!report/report.tex
