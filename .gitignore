@@ -1,1 +1,5 @@
 *.log
+
+# latex compilation artifacts
+report/*
+!report/report.tex
