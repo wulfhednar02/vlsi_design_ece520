@@ -6,5 +6,5 @@
 Project\ 1-wire\ Noise\ Cancelling/
 
 # latex compilation artifacts
-report/*
+# report/* #TODO: make this more specific
 !report/report.tex
