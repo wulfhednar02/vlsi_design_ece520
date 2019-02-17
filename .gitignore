@@ -1,6 +1,7 @@
 # T-Spice
 *.log
 *.tsim
+*_test/
 1Wire/
 Project\ 1-wire\ Noise\ Cancelling/
 
