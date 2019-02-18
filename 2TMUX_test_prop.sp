@@ -13,7 +13,7 @@
 * VDD voltage
 Vsupply VDD 0 5
 
-Xuut2 test_in_g test_out_g VDD 0 2TMUX
+Xuut2 Vdd 0 test_in_g test_out_g VDD 0 2TMUX
 Rtest test_in_g test_in 100000
 
 * I'm not sure this is the best test of the mux because in this configuration it's the same as an inverter
