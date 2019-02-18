@@ -13,7 +13,7 @@
 * VDD voltage
 Vsupply VDD 0 5
 
-Xuut2 Vdd 0 test_in_g test_out_g VDD 0 2TMUX
+Xuut2 VDD 0 test_in_g test_out_g VDD 0 2TMUX
 Rtest test_in_g test_in 100000
 
 * I'm not sure this is the best test of the mux because in this configuration it's the same as an inverter
@@ -24,8 +24,8 @@ Ctestload test_out 0 1p
 * Input waveforms as stimulus
 Vtx1 test_in 0 PULSE(0 5 0 0n 0n 100n 400n)
 
-.measure tran T_mux_plh   trig V(test_in)    val={{0.5*VDD}} rise=2 targ V(test_out)  val={{0.5*VDD}} rise=2
-.measure tran T_mux_phl   trig V(test_in)    val={{0.5*VDD}} fall=2 targ V(test_out)  val={{0.5*VDD}} fall=2
+.measure tran T_mux_plh   trig V(test_in)    val={{0.5*VDD}} rise=2 targ V(test_out)  val={{0.5*VDD}} fall=2
+.measure tran T_mux_phl   trig V(test_in)    val={{0.5*VDD}} fall=2 targ V(test_out)  val={{0.5*VDD}} rise=2
 .measure tran T_mux_rise  trig V(test_out)   val={{0.1*VDD}} rise=1 targ V(test_out)  val={{0.9*VDD}} rise=1
 .measure tran T_mux_fall  trig V(test_out)   val={{0.9*VDD}} fall=1 targ V(test_out)  val={{0.1*VDD}} fall=1
 .measure tran T_n_strong_g trig V(test_in_g) val={{0.1*VDD}} rise=1 targ V(test_in_g) val={{0.9*VDD}} rise=1
