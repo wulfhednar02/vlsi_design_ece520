@@ -35,8 +35,10 @@ Vsupply VDD 0 5
 Xlowvm  CHANNEL lowDetect  VDD GND INV_N_STRONG
 Xhighvm CHANNEL highDetect VDD GND INV_P_STRONG
 Xrxmux lowDetect highDetect TX rxmuxout VDD GND 2TMUX
-Xrxinvout rxmuxout rxbufin VDD GND INV(X=3)
-Xrxbuf1 rxbufin RX VDD GND BUF(X=27)
+Xrxinvout rxmuxout  rxbufin   VDD GND INV(X=3)    * 1 stage
+Xrxbuf1   rxbufin   rxbuf1out VDD GND BUF(X=27)   * 2,3 stage
+Xrxbuf2   rxbuf1out rxbuf2out VDD GND BUF(X=243)  * 4,5 stage
+Xrxbuf3   rxbuf2out RX        VDD GND BUF(X=2187) * 6,7 stage
 
 .ends
 
