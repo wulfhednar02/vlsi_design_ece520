@@ -2,6 +2,10 @@
 
 \usepackage[margin=1.0in]{geometry} % less huge margins
 
+\usepackage{siunitx}
+\usepackage{xfrac}
+\sisetup{per-mode=fraction, fraction-function=\sfrac}
+
 \title{1-Wire Transceiver Project Phase 1}
 \author{Charles Helmich \and Ivan Bow \and Don Owen}
 \date{February 25, 2019}
@@ -10,9 +14,112 @@
 
 \maketitle
 
+\tableofcontents
+
 \section{Description of Design}
 \subsection{Functional Description}
+The operation of the one-wire channel with a transceiver on either end will produce 3 possible voltages on the channel: 0, 5, and 2.5 volts.
+When both transceivers are sending the same value, the voltage on the channel will be that value, either 0 or 5 volts.
+When the transceivers are are sending opposite values, the value on the channel will be halfway between the two TX values because the external resistors will form a voltage divider.
+Based on these possible values on the channel it is straightforward to produce a logic table that unambiguously decodes what the received value at a transceiver is.
+
+\begin{table}[htb]
+    \centering
+    \begin{tabular}{c c c}
+        Channel & TX (local) & RX (remote tx) \\
+        \hline
+        0   & 0 & 0 \\
+        2.5 & 0 & 5 \\
+        2.5 & 5 & 0 \\
+        5   & 5 & 5 \\
+        \hline
+    \end{tabular}
+    \caption{Voltage logic table}
+\end{table}
+
+In order to differentiate between the 3 possible channel voltages we chose to design a pair of imbalanced inverters that have mid-point voltages that are either 1.25 or 3.75 volts, corresponding to halfway between 0 and 2.5 volts and halfway between 2.5 and 5 volts, respectively.
+The inverter with a low Vm has a much stronger nFET than pFET and the high Vm is the opposite.
+\par
+The n-strong inverter will be on when the channel voltage is 2.5 or 5 volts while the p-strong inverter will be on when the channel voltage is 2.5 or 0 volts.
+The next stage of the receiver uses the local TX signal to control a mux that selects either the n-strong or p-strong output.
+When the local TX is high, it selects the p-strong output.
+The p-strong output will be logically 1 when the channel is low (2.5V) and 0 when the channel is high (5V), corresponding logically to ~RX.
+When the local TX is low, the n-strong output will be logically 1 when the channel is low (0V) and 0 when the channel is high (2.5V), corresponding logically to ~RX.
+\par
+We note that because we chose to design the mux with a single nFET and pFET the value passes through is degraded and not driven to the full 0-5V range.
+This does not have a significant impact on the function of the receiver because the later stages both invert and buffer the ~RX signal, giving it a full 0-5V swing.
+The final stage in the receiver is an inverter chain that rectifies the ~RX signal into an RX signal and buffers the output to drive non-trivial load capacitances.
+
 \subsection{Logic Sizing}
+
+\subsubsection{Inverters}
+With the $\mu_0$, $V_{th}$, and $T_{ox}$, parameters taken from provided model library, we calculated the theoretical width ratio of the pFET to the nFET for the for the 3 different $V_m$ values used in our design according to the following formula:
+
+$$
+\frac{K'_n}{2} \frac{W_n}{L} (V_m - V_{tn}) ^ 2 =
+\frac{K'_p}{2} \frac{W_p}{L} (V_{DD} - V_m - |V_{tp}|) ^ 2
+$$
+
+Based on that formula, we calculated the width ratios for imbalanced and balanced inverters that gave us the Vm values we needed for our design.
+These are shown in the table below.
+
+\begin{table}[htb]
+    \centering
+    \begin{tabular}{c c c}
+        $V_m$ & $W_p$ & $W_n$ \\
+        \hline
+        1.25V & 1     & 9.27 \\
+        2.5V  & 3.125 & 1 \\
+        3.25V & 194.5 & 1 \\
+        \hline
+    \end{tabular}
+    \caption{Switching voltage ratios (first order approximation)}
+\end{table}
+
+Because the above calculations only take into account the first-order effects specified in the model library, we also instantiated the inverter designs into a SPICE simulation and experimentally measured the width ratios that gave us the required $V_m$ values.
+These are shown in the table below.
+These (or close approximations) are the width ratios that we used in the designs for the project.
+
+\begin{table}[htb]
+    \centering
+    \begin{tabular}{c c c}
+        $V_m$ & $W_p$ & $W_n$ \\
+        \hline
+        1.25V & 1     & 4.126 \\
+        2.5V  & 2.258 & 1 \\
+        3.25V & 44.25 & 1 \\
+        \hline
+    \end{tabular}
+    \caption{Switching voltage ratios (simulated)}
+\end{table}
+
+\subsubsection{2-Transistor-Mux}
+The 2-Transistor Mux (2TMux) looks like a 1X balanced inverter in design, except with the supply of the nFET and pFET wired to the 2 signals to be multiplexed.
+When driven high, the gate selects the n supply signal to pass through and vice versa when low.
+This design will never produce a full 0-VDD voltage swing, but does allow us to mux the output of our imbalanced inverters with only 2 transistors and the TX signal, avoiding the cost of inverting the TX and creating a full transmission gate mux.
+The output of the mux is fed into a balanced inverter with a Vm of 2.5; this inverter will produce an almost rail to rail swing because neither transistor will ever be fully off and further buffering stages will restore the rail-to-rail swing.
+
+\subsubsection{Output Buffer}
+Based on the parallel plate capacitor model we calculated that the gate capacitance for the process was
+
+$$
+C_{gate} = C_{ox} = \frac{\mathcal{E}_{ox}}{T_{ox}} =
+\frac{3.9 \times \num{8.854e-12}}{\num{1.38e-8}} \times
+\frac{\SI{1}{\meter\squared}}{\SI{1e12}{\micro\meter\squared}} =
+\SI{2.48}{\femto\farad\per\micro\meter\squared}
+$$
+
+With a balanced 1X inverter design, the resulting capacitance was then
+
+$$
+\SI{2.48}{\femto\farad\per\micro\meter\squared} \times L \times (W_n + W_p) =
+\SI{2.48}{\femto\farad\per\micro\meter\squared} \times \SI{0.6}{\micro\meter} \times (\SI{3}{\micro\meter} + \SI{6.75}{\micro\meter}) =
+\SI{14.5}{\femto\farad}
+$$
+
+With an assumed output capacitance load of 20pF the resulting fanout from the ~RX signal to the load was approximately 1400.
+The optimal number of optimal-fanout stages is then ln(1400) =7.2.
+Because we needed to invert the ~RX signal, we chose to use an odd and therefore inverting 7-stage output inverter chain with a ratio of 3x fanout per stage (for simplicity of design) to buffer the ~RX signal to the assumed load capacitance on RX.
 
 \section{Waveforms of Sub-designs}
 \subsection{Imbalanced Inverters}

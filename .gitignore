@@ -8,4 +8,6 @@
 *.fdb_latexmk
 *.fls
 *.log
+*.lot
+*.toc
 *.synctex.gz
