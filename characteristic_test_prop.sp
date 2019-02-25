@@ -5,15 +5,23 @@
 .options maxmsg=0
 .options compat=pspice * for expression syntax
 
+.param MIN_CHANNEL_WIDTH=3u * dont change this, corresponds to 10-lambda per MOSIS design rule suggestions
 .param BALANCED_RATIO=2.2 * exact=2.248
+
 .param N_STRONG_RATIO=4.1 * exact=4.126
 .param P_STRONG_RATIO=44  * exact=44.25
-.param MIN_CHANNEL_WIDTH=3u * dont change this, corresponds to 10-lambda per MOSIS design rule suggestions
+
+.param P_SUPER_STRONG_RATIO=1000
+.param N_SUPER_STRONG_RATIO=454
 
 .INCLUDE "INV.sp"
 .INCLUDE "BUF.sp"
+
 .INCLUDE "INV_N_STRONG.sp"
 .INCLUDE "INV_P_STRONG.sp"
+
+.INCLUDE "INV_N_SUPER_STRONG.sp"
+.INCLUDE "INV_P_SUPER_STRONG.sp"
 
 * Supply voltage
 Vsupply VDD 0 DC 5v
@@ -25,7 +33,15 @@ Xuut1 test_in test_out_INV VDD 0 INV
 Xuut2 test_in test_out_BUF VDD 0 BUF(X=3)
 Xuut3 test_in test_out_INV_N_STRONG VDD 0 INV_N_STRONG
 Xuut4 test_in test_out_INV_P_STRONG VDD 0 INV_P_STRONG
+Xuut5 test_in test_out_INV_N_SUPER_STRONG VDD 0 INV_N_SUPER_STRONG
+Xuut6 test_in test_out_INV_P_SUPER_STRONG VDD 0 INV_P_SUPER_STRONG
 
-.plot test_in test_out_INV test_out_BUF test_out_INV_N_STRONG test_out_INV_P_STRONG
+.plot  test_in
+		+test_out_INV
+		+test_out_BUF
+		+test_out_INV_N_STRONG
+		+test_out_INV_P_STRONG
+		+test_out_INV_N_SUPER_STRONG
+		+test_out_INV_P_SUPER_STRONG
 
 .op
