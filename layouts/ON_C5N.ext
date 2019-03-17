@@ -1,0 +1,39 @@
+# File: AMIS_C5N.ext
+# For: Extract definition file
+# Technology: AMI 0.5 um Process (AMIS_C5N)
+# Technology Setup File and Test/Demo Suite: AMIS_C5N.tdb
+# Copyright © 2002-2003 Tanner EDA
+# All Rights Reserved 
+#
+# This file will work only with L-EDIT Version 7 and greater.
+# ****************************************************************************
+
+connect(n well wire, ndiff, ndiff)
+connect(Substrate, pdiff, pdiff)
+connect(Substrate, ChipSubstrate, ChipSubstrate)
+connect(ndiff, Metal1, Active Contact)
+connect(pdiff, Metal1, Active Contact)
+connect(poly wire, Metal1, Poly Contact)
+connect(Metal1, Metal2, Via1)
+connect(Metal2, Metal3, Via2)
+
+# NMOS transistor with poly gate
+device = MOSFET(
+               RLAYER=ntran;  
+               Drain=ndiff, AREA, PERIMETER;
+               Gate=poly wire;   
+               Source=ndiff, AREA, PERIMETER;
+               Bulk=Substrate;
+               MODEL=CMOSN;
+               )
+
+# PMOS transistor with poly gate
+device = MOSFET(
+               RLAYER=ptran;
+               Drain=pdiff, AREA, PERIMETER;
+               Gate=poly wire;
+               Source=pdiff, AREA, PERIMETER;
+               Bulk=n well wire;
+               MODEL=CMOSP;
+               )
+
