@@ -1,22 +1,5 @@
-* Circuit Extracted by Tanner Research's L-Edit V7.12 / Extract V4.00 ;
-* TDB File:  C:\Users\Don\Google Drive\UNM Classes\VLSI Design\Project\Tanner\vlsi_design\layouts\INVX9_v7, Cell:  INVX9
-* Extract Definition File:  ON_C5N.ext
-* Extract Date and Time:  03/19/2019 - 19:36
 
-.INCLUDE ON_C5N.modlib
-
-* WARNING:  Layers with Unassigned AREA Capacitance.
-*   <Substrate>
-*   <ChipSubstrate>
-* WARNING:  Layers with Unassigned FRINGE Capacitance.
-*   <ndiff>
-*   <Substrate>
-*   <pdiff>
-*   <n well wire>
-*   <ChipSubstrate>
-* WARNING:  Layers with Zero Resistance.
-*   <Substrate>
-*   <ChipSubstrate>
+.SUBCKT INVX9 IN OUT VDD GND
 
 * NODE NAME ALIASES
 *       1 = GND (160.499,147)
@@ -62,14 +45,4 @@ M19 INVX3 INVX1 GND GND CMOSN L=0.6u W=4.5u AD=16.2p PD=16.2u AS=99.135p PS=94.8
 M20 INVX1 IN GND GND CMOSN L=0.6u W=3u AD=10.35p PD=12.9u AS=99.135p PS=94.8u 
 * M20 DRAIN GATE SOURCE BULK (74 167.5 76 177.5) 
 
-* Vsupply VDD 0 5
-* Vtest IN 0 PULSE(0 5 0 10n 10n 100n 400n)
-* 
-* .probe
-* 
-* .tran 1p 2u
-
-* Total Nodes: 6
-* Total Elements: 20
-* Extract Elapsed Time: 0 seconds
-.END
+.ENDS

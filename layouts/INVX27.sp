@@ -1,22 +1,5 @@
-* Circuit Extracted by Tanner Research's L-Edit V7.12 / Extract V4.00 ;
-* TDB File:  C:\Users\Don\Google Drive\UNM Classes\VLSI Design\Project\Tanner\vlsi_design\layouts\INVX27_v7, Cell:  INVX27
-* Extract Definition File:  ON_C5N.ext
-* Extract Date and Time:  03/19/2019 - 19:31
 
-.INCLUDE ON_C5N.modlib
-
-* WARNING:  Layers with Unassigned AREA Capacitance.
-*   <Substrate>
-*   <ChipSubstrate>
-* WARNING:  Layers with Unassigned FRINGE Capacitance.
-*   <ndiff>
-*   <Substrate>
-*   <pdiff>
-*   <n well wire>
-*   <ChipSubstrate>
-* WARNING:  Layers with Zero Resistance.
-*   <Substrate>
-*   <ChipSubstrate>
+.SUBCKT INVX27 IN OUT VDD GND
 
 * NODE NAME ALIASES
 *       1 = GND (24.999,5.5)
@@ -72,14 +55,4 @@ M24 OUT IN GND GND CMOSN L=0.6u W=9u AD=174.15p PD=146.7u AS=192.51p PS=158.7u
 M25 OUT IN GND GND CMOSN L=0.6u W=9u AD=174.15p PD=146.7u AS=192.51p PS=158.7u 
 * M25 DRAIN GATE SOURCE BULK (13.5 19 15.5 49) 
 
-* Vsupply VDD 0 5
-* Vtest IN 0 PULSE(0 5 0 10n 10n 100n 400n)
-* 
-* .probe
-* 
-* .tran 1p 2u
-
-* Total Nodes: 4
-* Total Elements: 25
-* Extract Elapsed Time: 0 seconds
-.END
+.ENDS

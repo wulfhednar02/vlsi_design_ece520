@@ -1,22 +1,5 @@
-* Circuit Extracted by Tanner Research's L-Edit V7.12 / Extract V4.00 ;
-* TDB File:  C:\Users\Don\Google Drive\UNM Classes\VLSI Design\Project\Tanner\vlsi_design\layouts\INVX81_v7, Cell:  INVX81
-* Extract Definition File:  ON_C5N.ext
-* Extract Date and Time:  03/19/2019 - 19:48
 
 .INCLUDE ON_C5N.modlib
-
-* WARNING:  Layers with Unassigned AREA Capacitance.
-*   <Substrate>
-*   <ChipSubstrate>
-* WARNING:  Layers with Unassigned FRINGE Capacitance.
-*   <ndiff>
-*   <Substrate>
-*   <pdiff>
-*   <n well wire>
-*   <ChipSubstrate>
-* WARNING:  Layers with Zero Resistance.
-*   <Substrate>
-*   <ChipSubstrate>
 
 * NODE NAME ALIASES
 *       1 = GND (58.667,148)
@@ -126,14 +109,4 @@ M51 OUT IN GND GND CMOSN L=0.6u W=10.2u AD=403.92p PD=324u AS=464.13p PS=374.1u
 M52 OUT IN GND GND CMOSN L=0.6u W=10.2u AD=403.92p PD=324u AS=464.13p PS=374.1u 
 * M52 DRAIN GATE SOURCE BULK (22.667 104.5 24.667 138.5) 
 
-* Vsupply VDD 0 5
-* Vtest IN 0 PULSE(0 5 0 10n 10n 100n 400n)
-* 
-* .probe
-* 
-* .tran 1p 2u
-
-* Total Nodes: 4
-* Total Elements: 52
-* Extract Elapsed Time: 1 seconds
-.END
+.ENDS
