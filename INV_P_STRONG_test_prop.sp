@@ -9,6 +9,7 @@
 .param MIN_CHANNEL_WIDTH=3u * dont change this, corresponds to 10-lambda per MOSIS design rule suggestions
 
 .INCLUDE "INV_P_STRONG.sp"
+* .INCLUDE "INV_P_STRONG_extract.sp"
 
 * VDD voltage
 Vsupply VDD 0 5
