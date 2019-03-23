@@ -130,10 +130,11 @@ Rseries_tx2 TX2 CHANNEL 100
 
 Cpad1 RX1 0 20pF
 Cpad2 RX2 0 20pF
+Cchannel CHANNEL 0 1pF
 
-Vtx1 TX1 0 PULSE(0 5 0 1p 1p 10n 20n)
+Vtx1 TX1 0 PULSE(0 5 0 1p 1p 20n 40n)
 
-Vtx2 TX2 0 0
+Vtx2 TX2 0 PULSE(0 5 0 1p 1p 12n 25n)
 
 .tran 1ps 100n
 
