@@ -1,23 +1,9 @@
-* Circuit Extracted by Tanner Research's L-Edit V7.12 / Extract V4.00 ;
-* TDB File:  C:\Users\ibows\Documents\ECE520\Project\Layout\Project_Inverter_v7, Cell:  Transceiver
-* Extract Definition File:  ON_C5N.ext
-* Extract Date and Time:  03/23/2019 - 11:21
 
 .INCLUDE ON_C5N.modlib
+.INCLUDE OUTBUF.sp
 
-* WARNING:  Layers with Unassigned AREA Capacitance.
-*   <Substrate>
-*   <ChipSubstrate>
-* WARNING:  Layers with Unassigned FRINGE Capacitance.
-*   <ndiff>
-*   <Substrate>
-*   <pdiff>
-*   <n well wire>
-*   <ChipSubstrate>
-* WARNING:  Layers with Zero Resistance.
-*   <Substrate>
-*   <ChipSubstrate>
 
+.SUBCKT TRANSCEIVER TX RX CHANNEL VDD GND
 * NODE NAME ALIASES
 *       1 = GND (165.5,-34)
 *       1 = U10/GND (284.5,-33.5)
@@ -128,8 +114,36 @@ M39 U10/Output CHANNEL GND GND CMOSN L=0.6u W=3u AD=4.95p PD=9.3u AS=50.49p PS=8
 * M39 DRAIN GATE SOURCE BULK (384.5 -13.5 386.5 -3.5) 
 M40 U11/Input_N U58/Input GND GND CMOSN L=0.6u W=3u AD=41.4p PD=39.6u AS=50.49p PS=87.6u 
 * M40 DRAIN GATE SOURCE BULK (236 -13 238 -3) 
+.ENDS
 
-* Total Nodes: 12
-* Total Elements: 40
-* Extract Elapsed Time: 0 seconds
+
+Vdd VDD 0 5
+
+Xtrans1 TX1 RX1_prebuf CHANNEL VDD 0 TRANSCEIVER
+Xbuf1 RX1_prebuf RX1 VDD 0 OUTBUF
+
+Xtrans2 TX2 RX2_prebuf CHANNEL VDD 0 TRANSCEIVER
+Xbuf2 RX2_prebuf RX2 VDD 0 OUTBUF
+
+Rseries_tx1 TX1 CHANNEL 100
+Rseries_tx2 TX2 CHANNEL 100
+
+Cpad1 RX1 0 20pF
+Cpad2 RX2 0 20pF
+
+Vtx1 TX1 0 PULSE(0 5 0 1p 1p 10n 20n)
+
+Vtx2 TX2 0 0
+
+.tran 1ps 100n
+
+.measure tran T_phl  trig V(TX1) val={{0.5*VDD}}        rise=2 targ V(RX2) val={{0.5*VDD}}         rise=2
+.measure tran T_plh  trig V(TX1) val={{0.5*VDD}}        fall=2 targ V(RX2) val={{0.5*VDD}}         fall=2
+.measure tran T_rise trig V(RX2) val={{0.1*VDD}} td=10n rise=1 targ V(RX2) val={{0.9*VDD}} td=10n  rise=1
+.measure tran T_fall trig V(RX2) val={{0.9*VDD}} td=10n fall=1 targ V(RX2) val={{0.1*VDD}} td=10n  fall=1
+
+.plot V(TX1) V(RX2)
+
+.probe
+
 .END
