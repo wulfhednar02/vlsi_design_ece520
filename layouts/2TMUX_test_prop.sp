@@ -38,6 +38,20 @@ M7 Output Select Input_P VDD CMOSP L=0.6u W=3u AD=6.75p PD=10.5u AS=4.95p PS=9.3
 M8 Output Select Input_N GND CMOSN L=0.6u W=3u AD=6.75p PD=10.5u AS=4.95p PS=9.3u 
 * M8 DRAIN GATE SOURCE BULK (11.5 -20.5 13.5 -10.5) 
 
+Vdd VDD GND 5
+Vin_n Input_N GND 5
+Vin_p Input_P GND 0
+Vsel Select 0 PULSE(0 5 0 1p 1p 10n 20n)
+
+.tran 1ps 100n
+.plot V(Select) V(Output)
+
+
+.measure tran T_phl  trig V(Select) val={{0.5*VDD}}        fall=2 targ V(Output) val={{0.5*VDD}}         fall=2
+.measure tran T_plh  trig V(Select) val={{0.5*VDD}}        rise=2 targ V(Output) val={{0.5*VDD}}         rise=2
+.measure tran T_rise trig V(Output) val={{0.1*VDD}} td=10n rise=1 targ V(Output) val={{0.9*VDD}} td=10n  rise=1
+.measure tran T_fall trig V(Output) val={{0.9*VDD}} td=10n fall=1 targ V(Output) val={{0.1*VDD}} td=10n  fall=1
+
 * Total Nodes: 6
 * Total Elements: 8
 * Extract Elapsed Time: 0 seconds
