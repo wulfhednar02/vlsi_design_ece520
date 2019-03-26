@@ -34,6 +34,18 @@ M5 Output Input VDD VDD CMOSP L=0.6u W=6.75u AD=82.0125p PD=37.8u AS=11.1375p PS
 M6 Output Input GND GND CMOSN L=0.6u W=3u AD=36.45p PD=30.3u AS=4.95p PS=9.3u 
 * M6 DRAIN GATE SOURCE BULK (13.5 -16 15.5 -6) 
 
+Vdd VDD GND 5
+VInput Input 0 PULSE(0 5 0 1p 1p 10n 20n)
+
+.tran 1ps 100n
+.plot V(Input) V(Output)
+
+.measure tran T_phl  trig V(Input) val={{0.5*VDD}}         rise=2 targ V(Output) val={{0.5*VDD}}         fall=2
+.measure tran T_plh  trig V(Input) val={{0.5*VDD}}         fall=2 targ V(Output) val={{0.5*VDD}}         rise=2
+.measure tran T_rise trig V(Output) val={{0.1*VDD}} td=10n rise=1 targ V(Output) val={{0.9*VDD}} td=10n  rise=1
+.measure tran T_fall trig V(Output) val={{0.9*VDD}} td=10n fall=1 targ V(Output) val={{0.1*VDD}} td=10n  fall=1
+
+
 * Total Nodes: 4
 * Total Elements: 6
 * Extract Elapsed Time: 0 seconds
